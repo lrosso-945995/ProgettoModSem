@@ -1,0 +1,483 @@
+@prefix : <http://example.org/ontology#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix Football: <http://www.semanticweb.org/football#> .
+@base <http://example.org/ontology#> .
+
+<http://www.semanticweb.org/football#> rdf:type owl:Ontology ;
+                                        dc:creator "Rosso Lorenzo" ;
+                                        dc:date "2025-09-010T19:07:00" ;
+                                        dc:description "The ontology deals with the main concepts related to the sport of Football, focusing on its match analysis aspects."@en ;
+                                        dc:title "Football Ontology" ;
+                                        vann:preferredNamespacePrefix "football" ;
+                                        vann:preferredNamespaceUri "http://www.semanticweb.org/football" ;
+                                        rdfs:label "footballOntology" .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/elements/1.1/creator
+dc:creator rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/elements/1.1/date
+dc:date rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/elements/1.1/description
+dc:description rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/elements/1.1/title
+dc:title rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespacePrefix
+vann:preferredNamespacePrefix rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespaceUri
+vann:preferredNamespaceUri rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2002/07/owl#functional
+owl:functional rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2002/07/owl#transitive
+owl:transitive rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/football#hasPerformance
+Football:hasPerformance rdf:type owl:ObjectProperty ;
+                        rdfs:domain Football:Player ;
+                        rdfs:range Football:Performance ;
+                        rdfs:comment "hasPerformance is a property that associates the Player to his performance"@en ;
+                        rdfs:label "hasPerformance"@en .
+
+
+###  http://www.semanticweb.org/football#hasPlayer
+Football:hasPlayer rdf:type owl:ObjectProperty ;
+                   owl:inverseOf Football:playsFor ;
+                   rdfs:domain Football:Team ;
+                   rdfs:range Football:Player ;
+                   rdfs:comment "hasPlayer is a property that links a team to the players who are part of it"@en ;
+                   rdfs:label "hasPlayer"@en ;
+                   owl:transitive "true"^^xsd:boolean .
+
+
+###  http://www.semanticweb.org/football#hasPosition
+Football:hasPosition rdf:type owl:ObjectProperty ,
+                              owl:FunctionalProperty ;
+                     rdfs:domain Football:Player ;
+                     rdfs:range Football:Position ;
+                     rdfs:comment "hasPosition is a property that links a player to his specific position in the pitch"@en ;
+                     rdfs:label "hasPosition"@en ;
+                     owl:functional "true"^^xsd:boolean .
+
+
+###  http://www.semanticweb.org/football#isTeammateOf
+Football:isTeammateOf rdf:type owl:ObjectProperty ;
+                      rdfs:domain Football:Player ;
+                      rdfs:range Football:Player ;
+                      owl:propertyChainAxiom ( Football:playsFor
+                                               Football:hasPlayer
+                                             ) ;
+                      rdfs:comment "isTeammateOf is a property that links two players who play in the same team"@en ;
+                      rdfs:label "isTeammateOf"@en .
+
+
+###  http://www.semanticweb.org/football#participatesIn
+Football:participatesIn rdf:type owl:ObjectProperty ;
+                        rdfs:domain Football:Player ;
+                        rdfs:range Football:Match ;
+                        rdfs:comment "participatesIn is a property that links a player to the matches they play"@en ;
+                        rdfs:label "participatesIn"@en .
+
+
+###  http://www.semanticweb.org/football#plays
+Football:plays rdf:type owl:ObjectProperty ;
+               rdfs:domain Football:Team ;
+               rdfs:range Football:Match ;
+               rdfs:comment "plays is a property that links a team to the matches they compete in."@en ;
+               rdfs:label "plays"@en .
+
+
+###  http://www.semanticweb.org/football#playsFor
+Football:playsFor rdf:type owl:ObjectProperty ;
+                  rdfs:domain Football:Player ;
+                  rdfs:range Football:Team ;
+                  rdfs:comment "playsFor is a property that links a player to the team they play for"@en ;
+                  rdfs:label "playsFor"@en .
+
+
+###  http://www.semanticweb.org/football#referredTo
+Football:referredTo rdf:type owl:ObjectProperty ;
+                    rdfs:domain Football:Performance ;
+                    rdfs:range Football:Match ;
+                    rdfs:comment "referredTo is a property that links a performance to a specific Match"@en ;
+                    rdfs:label "referredTo"@en .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/football#age
+Football:age rdf:type owl:DatatypeProperty ;
+             rdfs:domain Football:Person ;
+             rdfs:range xsd:integer ;
+             rdfs:comment "age is a property that represents the number of years a player has lived"@en ;
+             rdfs:label "age"@en .
+
+
+###  http://www.semanticweb.org/football#nAssists
+Football:nAssists rdf:type owl:DatatypeProperty ;
+                  rdfs:domain Football:Performance ;
+                  rdfs:range xsd:integer ;
+                  rdfs:comment "Number of assists"@en ;
+                  rdfs:label "nAssists"@en .
+
+
+###  http://www.semanticweb.org/football#nExpectedGoals
+Football:nExpectedGoals rdf:type owl:DatatypeProperty ;
+                        rdfs:domain Football:Performance ;
+                        rdfs:range xsd:decimal ;
+                        rdfs:comment "Number of expected goals (XG)"@en ;
+                        rdfs:label "nExpectedGoals"@en .
+
+
+###  http://www.semanticweb.org/football#nGoals
+Football:nGoals rdf:type owl:DatatypeProperty ;
+                rdfs:domain Football:Performance ;
+                rdfs:range xsd:integer ;
+                rdfs:comment "Number of goals"@en ;
+                rdfs:label "nGoals"@en .
+
+
+###  http://www.semanticweb.org/football#nTouches
+Football:nTouches rdf:type owl:DatatypeProperty ;
+                  rdfs:domain Football:Performance ;
+                  rdfs:range xsd:integer ;
+                  rdfs:comment "Number of touches"@en ;
+                  rdfs:label "nTouches"@en .
+
+
+###  http://www.semanticweb.org/football#name
+Football:name rdf:type owl:DatatypeProperty ;
+              rdfs:domain Football:Person ;
+              rdfs:range xsd:string ;
+              rdfs:comment "name is a property that represents the name of a player or entity"@en ;
+              rdfs:label "name"@en .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://schema.org/SportsTeam
+<http://schema.org/SportsTeam> rdf:type owl:Class ;
+                               owl:equivalentClass Football:Team .
+
+
+###  http://www.semanticweb.org/football#ClubTeam
+Football:ClubTeam rdf:type owl:Class ;
+                  rdfs:subClassOf Football:Team ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty Football:plays ;
+                                    owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                    owl:onClass Football:LocalMatch
+                                  ] ;
+                  rdfs:comment "A ClubTeam is a team which plays local matches"@en ;
+                  rdfs:label "ClubTeam"@en .
+
+
+###  http://www.semanticweb.org/football#Defender
+Football:Defender rdf:type owl:Class ;
+                  rdfs:subClassOf Football:Player .
+
+
+###  http://www.semanticweb.org/football#Forward
+Football:Forward rdf:type owl:Class ;
+                 rdfs:subClassOf Football:Player .
+
+
+###  http://www.semanticweb.org/football#Goalkeeper
+Football:Goalkeeper rdf:type owl:Class ;
+                    rdfs:subClassOf Football:Player .
+
+
+###  http://www.semanticweb.org/football#InternationalMatch
+Football:InternationalMatch rdf:type owl:Class ;
+                            rdfs:subClassOf Football:Match ;
+                            rdfs:comment "A Match played between two NationalTeams"@en ;
+                            rdfs:label "InternationalMatch"@en .
+
+
+###  http://www.semanticweb.org/football#LocalMatch
+Football:LocalMatch rdf:type owl:Class ;
+                    rdfs:subClassOf Football:Match ;
+                    rdfs:comment "A Match played between two ClubTeams"@en ;
+                    rdfs:label "LocalMatch"@en .
+
+
+###  http://www.semanticweb.org/football#Match
+Football:Match rdf:type owl:Class ;
+               owl:equivalentClass <https://www.bbc.co.uk/ontologies/sport/Match> ;
+               rdfs:comment "A Match is a competitive game between two Teams"@en ;
+               rdfs:label "Match"@en .
+
+
+###  http://www.semanticweb.org/football#Midfielder
+Football:Midfielder rdf:type owl:Class ;
+                    rdfs:subClassOf Football:Player .
+
+
+###  http://www.semanticweb.org/football#NationalPlayer
+Football:NationalPlayer rdf:type owl:Class ;
+                        rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                          owl:onProperty Football:playsFor ;
+                                          owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                          owl:onClass Football:NationalTeam
+                                        ] ;
+                        rdfs:comment "A NationalPlayer is a player who plays for a NationalTeam"@en ;
+                        rdfs:label "NationalPlayer"@en .
+
+
+###  http://www.semanticweb.org/football#NationalTeam
+Football:NationalTeam rdf:type owl:Class ;
+                      rdfs:subClassOf Football:Team ,
+                                      [ rdf:type owl:Restriction ;
+                                        owl:onProperty Football:plays ;
+                                        owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                        owl:onClass Football:InternationalMatch
+                                      ] ;
+                      rdfs:comment "A NationalTeam is a team which plays InternationalMatches"@en ;
+                      rdfs:label "NationalTeam"@en .
+
+
+###  http://www.semanticweb.org/football#Performance
+Football:Performance rdf:type owl:Class ;
+                     rdfs:comment "A Performance is a group of stats that a Player records in a specific Match"@en ;
+                     rdfs:label "Performance"@en .
+
+
+###  http://www.semanticweb.org/football#Person
+Football:Person rdf:type owl:Class ;
+                owl:equivalentClass <http://xmlns.com/foaf/0.1/Person> ;
+                rdfs:comment "A Person represents an individual human"@en ;
+                rdfs:label "Person"@en .
+
+
+###  http://www.semanticweb.org/football#Player
+Football:Player rdf:type owl:Class ;
+                owl:equivalentClass [ rdf:type owl:Restriction ;
+                                      owl:onProperty Football:hasPosition ;
+                                      owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                      owl:onClass Football:Position
+                                    ] ;
+                rdfs:subClassOf Football:Person ;
+                rdfs:comment "A Player is a person which job is to play competitve football"@en ;
+                rdfs:label "Player"@en .
+
+
+###  http://www.semanticweb.org/football#Position
+Football:Position rdf:type owl:Class ;
+                  owl:equivalentClass [ rdf:type owl:Class ;
+                                        owl:oneOf ( Football:Defender
+                                                    Football:Forward
+                                                    Football:Goalkeeper
+                                                    Football:Midfielder
+                                                  )
+                                      ] ;
+                  rdfs:comment "A Position is the place where a player has to play inside the pitch"@en ;
+                  rdfs:label "Position"@en .
+
+
+###  http://www.semanticweb.org/football#Team
+Football:Team rdf:type owl:Class ;
+              owl:equivalentClass [ rdf:type owl:Restriction ;
+                                    owl:onProperty Football:hasPlayer ;
+                                    owl:someValuesFrom Football:Player
+                                  ] ;
+              rdfs:comment "A Team represents a group of players organized to play together"@en ;
+              rdfs:label "Team"@en .
+
+
+###  http://xmlns.com/foaf/0.1/Person
+<http://xmlns.com/foaf/0.1/Person> rdf:type owl:Class .
+
+
+###  https://www.bbc.co.uk/ontologies/sport/Match
+<https://www.bbc.co.uk/ontologies/sport/Match> rdf:type owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.semanticweb.org/football#ArgentinaNationalTeam
+Football:ArgentinaNationalTeam rdf:type owl:NamedIndividual ,
+                                        Football:NationalTeam ;
+                               Football:hasPlayer Football:LionelMessi ;
+                               Football:plays Football:WorldCupFinal2022 .
+
+
+###  http://www.semanticweb.org/football#CristianoRonaldo
+Football:CristianoRonaldo rdf:type owl:NamedIndividual ,
+                                   Football:Player ;
+                          Football:hasPosition Football:Forward ;
+                          Football:playsFor Football:PortugalNationalTeam ;
+                          Football:age 40 ;
+                          Football:name "Cristiano Ronaldo" ;
+                          rdfs:comment "Professional football player"@en ;
+                          rdfs:label "CristianoRonaldo"@en .
+
+
+###  http://www.semanticweb.org/football#Defender
+Football:Defender rdf:type owl:NamedIndividual .
+
+
+###  http://www.semanticweb.org/football#Forward
+Football:Forward rdf:type owl:NamedIndividual .
+
+
+###  http://www.semanticweb.org/football#FranceNationalTeam
+Football:FranceNationalTeam rdf:type owl:NamedIndividual ,
+                                     Football:NationalTeam ;
+                            Football:hasPlayer Football:KylianMbappe ;
+                            Football:plays Football:WorldCupFinal2022 ;
+                            rdfs:comment "National selection of best French players"@en ;
+                            rdfs:label "FranceNationalTeam"@en .
+
+
+###  http://www.semanticweb.org/football#Goalkeeper
+Football:Goalkeeper rdf:type owl:NamedIndividual .
+
+
+###  http://www.semanticweb.org/football#InterMiami
+Football:InterMiami rdf:type owl:NamedIndividual ,
+                             Football:ClubTeam ;
+                    rdfs:comment "Club team of MLS league"@en ;
+                    rdfs:label "InterMiami"@en .
+
+
+###  http://www.semanticweb.org/football#JudeBellingham
+Football:JudeBellingham rdf:type owl:NamedIndividual ,
+                                 Football:Player ;
+                        Football:hasPosition Football:Midfielder ;
+                        Football:playsFor Football:RealMadrid ;
+                        Football:age 21 ;
+                        Football:name "Jude Bellingham" ;
+                        rdfs:comment "Professional football player"@en ;
+                        rdfs:label "JudeBellingham"@en .
+
+
+###  http://www.semanticweb.org/football#KylianMbappe
+Football:KylianMbappe rdf:type owl:NamedIndividual ,
+                               Football:Player ;
+                      Football:hasPerformance Football:MbappeFinalPerformance ;
+                      Football:hasPosition Football:Forward ;
+                      Football:participatesIn Football:WorldCupFinal2022 ;
+                      Football:playsFor Football:RealMadrid ;
+                      Football:age 26 ;
+                      Football:name "Kylian Mbappè" ;
+                      rdfs:comment "Professional football player"@en ;
+                      rdfs:label "KylianMbappe"@en .
+
+
+###  http://www.semanticweb.org/football#LionelMessi
+Football:LionelMessi rdf:type owl:NamedIndividual ,
+                              Football:Player ;
+                     Football:hasPerformance Football:MessiFinalPerformance ;
+                     Football:hasPosition Football:Forward ;
+                     Football:participatesIn Football:WorldCupFinal2022 ;
+                     Football:playsFor Football:InterMiami ;
+                     Football:age 37 ;
+                     Football:name "Lionel Messi" ;
+                     rdfs:comment "Professional football player" ;
+                     rdfs:label "LionelMessi"@en .
+
+
+###  http://www.semanticweb.org/football#MbappeFinalPerformance
+Football:MbappeFinalPerformance rdf:type owl:NamedIndividual ,
+                                         Football:Performance ;
+                                Football:referredTo Football:WorldCupFinal2022 ;
+                                Football:nAssists 0 ;
+                                Football:nExpectedGoals 1.8 ;
+                                Football:nGoals 3 ;
+                                Football:nTouches 47 ;
+                                rdfs:comment "Performance of Kylian Mbappe in WC Final 2022 final match"@en ;
+                                rdfs:label "MbappeFinalPerformance"@en .
+
+
+###  http://www.semanticweb.org/football#MessiFinalPerformance
+Football:MessiFinalPerformance rdf:type owl:NamedIndividual ,
+                                        Football:Performance ;
+                               Football:referredTo Football:WorldCupFinal2022 ;
+                               Football:nAssists 0 ;
+                               Football:nExpectedGoals 1.88 ;
+                               Football:nGoals 2 ;
+                               Football:nTouches 85 ;
+                               rdfs:comment "Performance of Lionel Messi in WC Final 2022 final match"@en ;
+                               rdfs:label "MessiFinalPerformance"@en .
+
+
+###  http://www.semanticweb.org/football#Midfielder
+Football:Midfielder rdf:type owl:NamedIndividual .
+
+
+###  http://www.semanticweb.org/football#PortugalNationalTeam
+Football:PortugalNationalTeam rdf:type owl:NamedIndividual ,
+                                       Football:NationalTeam ;
+                              Football:hasPlayer Football:CristianoRonaldo ;
+                              rdfs:comment "National selection of the best Portuguese players"@en ;
+                              rdfs:label "PortugalNationalTeam"@en .
+
+
+###  http://www.semanticweb.org/football#RealMadrid
+Football:RealMadrid rdf:type owl:NamedIndividual ,
+                             Football:ClubTeam ;
+                    Football:hasPlayer Football:KylianMbappe ;
+                    rdfs:comment "Club team of LaLiga league"@en ;
+                    rdfs:label "RealMadrid"@en .
+
+
+###  http://www.semanticweb.org/football#WorldCupFinal2022
+Football:WorldCupFinal2022 rdf:type owl:NamedIndividual ,
+                                    Football:InternationalMatch ;
+                           rdfs:comment "WorldCupFinal2022 represents the final match of the 2022 FIFA World Cup, where the two best teams compete for the world trophy"@en ;
+                           rdfs:label "WorldCupFinal2022"@en .
+
+
+#################################################################
+#    Annotations
+#################################################################
+
+Football:Defender rdfs:comment "A Defender is a player whose primary role is to prevent the opposing team from scoring."@en ;
+                  rdfs:label "Defender"@en .
+
+
+Football:Forward rdfs:comment "A Forward is a player focused on attacking and scoring goals for their team"@en ;
+                 rdfs:label "Forward"@en .
+
+
+Football:Goalkeeper rdfs:comment "A Goalkeeper is a player whose role is to defend the goal"@en ;
+                    rdfs:label "Goalkeeper"@en .
+
+
+Football:Midfielder rdfs:comment "A Midfielder is a player whose role is primarly related to make passes"@en ;
+                    rdfs:label "Midfielder"@en .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
